@@ -1,3 +1,4 @@
+import { pool } from "../db.js";
 
 
 export const getTasks = (req, res) => {
@@ -6,7 +7,12 @@ export const getTasks = (req, res) => {
 export const getTask = (req, res) => {
     res.send("Conseguimos una tarea especifica 👀 💫 ")
 }
-export const createTask = (req, res) => {
+export const createTask = async (req, res) => {
+    const {title, description} = req.body
+   const result = await pool.query('INSERT INTO tasks (title, description) VALUES (?, ?)', 
+    [title, description]
+)
+    console.log(result);
     res.send("🏦 💫  Creamos una tarea NUEVA 💫 ")
 }
 export const updateTasks = (req, res) => {

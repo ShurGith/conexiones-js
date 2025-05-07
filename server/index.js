@@ -6,11 +6,11 @@ import taskRoutes from "./routes/task.routes.js";
 
 const app = express();
 
+app.use(express.json());
 app.use(indexRoutes);
 app.use(taskRoutes);
 
 
-app.use(express.json());
 
 app.listen(PORT, () => {
     console.log(`Servidor en escucha en el puerto ${PORT}`);
