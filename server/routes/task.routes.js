@@ -5,9 +5,9 @@ import {getTasks, getTask, createTask, updateTasks, deleteTasks} from '../contro
 //? Rutas de trabajos y tareas
 //** Tareas */
 router.get('/tasks', getTasks);
-router.get('/task/:id', getTask);
-router.post('/task', createTask);
-router.put('/task/:id', updateTasks);
-router.delete('/task/:id', deleteTasks);
+router.get('/tasks/:id', getTask);
+router.post('/tasks', createTask);
+router.put('/tasks/:id', updateTasks);
+router.delete('/tasks/:id', deleteTasks);
 export default router;
 
