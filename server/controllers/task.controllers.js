@@ -1,23 +1,72 @@
 import { pool } from "../db.js";
 
+//* Obtener todas las tareas
+export const getTasks = async (req, res) => {
+    //? Provocar un error para ver como se maneja el error
+    //! throw new Error('Method not implemented.');
+    //?
+    try {
+        const [result] = await pool.query(
+        'SELECT * FROM tasks ORDER BY createAt ASC'
+        )
+        res.json(result)
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
 
-export const getTasks = (req, res) => {
-    res.send("💫 Conseguimos todas las areas 🏦")
+//* Obtener una tarea
+export const getTask = async (req, res) => {
+    try {
+        const [result] = await pool.query(
+            'SELECT * FROM tasks WHERE id = ?', [req.params.id]
+        )
+        if (result.length === 0)
+            return res.status(404).json({ message: "Task not found" })
+        res.json(result[0])
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
 }
-export const getTask = (req, res) => {
-    res.send("Conseguimos una tarea especifica 👀 💫 ")
-}
+
+//* Crear una tarea
 export const createTask = async (req, res) => {
-    const {title, description} = req.body
-   const result = await pool.query('INSERT INTO tasks (title, description) VALUES (?, ?)', 
-    [title, description]
-)
-    console.log(result);
-    res.send("🏦 💫  Creamos una tarea NUEVA 💫 ")
+    try {
+        const { title, description } = req.body
+        const [result] = await pool.query(
+            'INSERT INTO tasks (title, description) VALUES (?, ?)',
+            [title, description]
+        )
+        res.json({
+            id: result.insertId, title, description
+        })
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
 }
-export const updateTasks = (req, res) => {
-    res.send("💫 Actualizamos una tarea")
+
+//* Actualizar una tarea
+export const updateTasks = async (req, res) => {
+    try {
+        const result = await pool.query(
+            'UPDATE tasks SET ? WHERE id = ?', [req.body, req.params.id]
+        )
+        res.json(result)
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
 }
-export const deleteTasks = (req, res) => {
-    res.send("🏦 Eliminamos una tarea")
+
+//* Eliminar una tarea
+export const deleteTasks = async (req, res) => {
+    try {
+        const [result] = await pool.query(
+            'DELETE FROM tasks WHERE id = ?', [req.params.id]
+        )
+        if (result.affectedRows === 0)
+            return res.status(404).json({ message: "Task not found to delete" })
+        return res.sendStatus(204)
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
 }

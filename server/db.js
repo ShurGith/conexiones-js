@@ -5,7 +5,7 @@ export const pool = createPool({
     user: 'root',
     password: '',
     port: 33006,
-    database: 'fila',
+    database: 'larareact',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
